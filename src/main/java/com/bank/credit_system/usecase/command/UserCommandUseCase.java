@@ -1,4 +1,4 @@
-package com.bank.credit_system.usecase.commands;
+package com.bank.credit_system.usecase.command;
 
 import com.bank.credit_system.dto.UserDTO;
 import com.bank.credit_system.entity.UserDocument;

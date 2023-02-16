@@ -1,8 +1,8 @@
 package com.bank.credit_system.controller;
 
 import com.bank.credit_system.dto.UserDTO;
-import com.bank.credit_system.usecase.commands.UserCommandUseCase;
-import com.bank.credit_system.usecase.handlers.UserHandlerUseCase;
+import com.bank.credit_system.usecase.command.UserCommandUseCase;
+import com.bank.credit_system.usecase.handler.UserHandlerUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

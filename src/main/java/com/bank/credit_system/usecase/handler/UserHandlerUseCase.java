@@ -1,4 +1,4 @@
-package com.bank.credit_system.usecase.handlers;
+package com.bank.credit_system.usecase.handler;
 
 import com.bank.credit_system.dto.UserDTO;
 import com.bank.credit_system.repository.UserRepository;

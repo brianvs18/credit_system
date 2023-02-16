@@ -12,7 +12,9 @@ import lombok.*;
 public class AccountDTO {
     private String id;
     private String accountType;
-    private Double accountBalance;
+    private Double availableBalance;
+    private Double income;
     private Long creationDate;
     private String userId;
+    private String status;
 }
