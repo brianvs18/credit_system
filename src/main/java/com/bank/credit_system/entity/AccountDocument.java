@@ -14,7 +14,7 @@ public class AccountDocument {
     @Id
     private String id;
     private String accountType;
-    private Integer accountNumber;
+    private Long accountNumber;
     private Double availableBalance;
     private Double income;
     private Long creationDate;
