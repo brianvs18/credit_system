@@ -18,6 +18,7 @@ public class UserHandlerUseCase {
                         .id(userDocument.getId())
                         .name(userDocument.getName())
                         .lastname(userDocument.getLastname())
+                        .identification(userDocument.getIdentification())
                         .age(userDocument.getAge())
                         .build());
     }
@@ -28,6 +29,18 @@ public class UserHandlerUseCase {
                         .id(userDocument.getId())
                         .name(userDocument.getName())
                         .lastname(userDocument.getLastname())
+                        .identification(userDocument.getIdentification())
+                        .age(userDocument.getAge())
+                        .build());
+    }
+
+    public Mono<UserDTO> findByIdentification(Integer identification){
+        return userRepository.findByIdentification(identification)
+                .map(userDocument -> UserDTO.builder()
+                        .id(userDocument.getId())
+                        .name(userDocument.getName())
+                        .lastname(userDocument.getLastname())
+                        .identification(userDocument.getIdentification())
                         .age(userDocument.getAge())
                         .build());
     }

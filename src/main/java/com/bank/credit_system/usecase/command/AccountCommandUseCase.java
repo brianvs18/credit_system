@@ -23,7 +23,7 @@ public class AccountCommandUseCase {
 
     public Mono<AccountDTO> saveAccount(AccountDTO accountDTO) {
         return Mono.just(accountDTO)
-                .flatMap(accountData -> userHandlerUseCase.findById(accountDTO.getUserId())
+                .flatMap(accountData -> userHandlerUseCase.findByIdentification(accountDTO.getUserIdentification())
                         .switchIfEmpty(Mono.defer(()-> Mono.error(new UserException(UserErrorEnum.USER_IS_NOT_EXISTS))))
                         .filter(userDTO -> Objects.nonNull(accountDTO.getId()))
                         .flatMap(userDTO -> accountRepository.findById(accountDTO.getId())
@@ -31,7 +31,7 @@ public class AccountCommandUseCase {
                                         .id(accountDB.getId())
                                         .accountType(AccountTypeEnum.idFromName(accountDTO.getAccountType()))
                                         .income(accountDTO.getIncome())
-                                        .userId(accountDTO.getUserId())
+                                        .userIdentification(accountDTO.getUserIdentification())
                                         .availableBalance(accountDB.getAvailableBalance())
                                         .creationDate(accountDB.getCreationDate())
                                         .status(accountDB.getStatus())
@@ -41,7 +41,7 @@ public class AccountCommandUseCase {
                                         .id(account.getId())
                                         .accountType(AccountTypeEnum.idFromName(account.getAccountType()))
                                         .income(account.getIncome())
-                                        .userId(account.getUserId())
+                                        .userIdentification(account.getUserIdentification())
                                         .creationDate(Clock.systemDefaultZone().millis())
                                         .status(AccountStatusEnum.ACTIVE.getId())
                                         .build())

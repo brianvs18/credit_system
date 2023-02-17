@@ -21,7 +21,7 @@ public class AccountHandlerUseCase {
                         .accountType(AccountTypeEnum.nameFromId(accountDocument.getAccountType()))
                         .availableBalance(accountDocument.getAvailableBalance())
                         .creationDate(accountDocument.getCreationDate())
-                        .userId(accountDocument.getUserId())
+                        .userIdentification(accountDocument.getUserIdentification())
                         .income(accountDocument.getIncome())
                         .status(AccountStatusEnum.nameFromId(accountDocument.getStatus()))
                         .build());
@@ -34,7 +34,7 @@ public class AccountHandlerUseCase {
                         .accountType(AccountTypeEnum.nameFromId(accountDocument.getAccountType()))
                         .availableBalance(accountDocument.getAvailableBalance())
                         .creationDate(accountDocument.getCreationDate())
-                        .userId(accountDocument.getUserId())
+                        .userIdentification(accountDocument.getUserIdentification())
                         .income(accountDocument.getIncome())
                         .status(AccountStatusEnum.nameFromId(accountDocument.getStatus()))
                         .build());
