@@ -41,4 +41,18 @@ public class AccountHandlerUseCase {
                         .status(AccountStatusEnum.nameFromId(accountDocument.getStatus()))
                         .build());
     }
+
+    public Mono<AccountDTO> findByUserIdentification(Integer userIdentification) {
+        return accountRepository.findByUserIdentification(userIdentification)
+                .map(accountDocument -> AccountDTO.builder()
+                        .id(accountDocument.getId())
+                        .accountType(AccountTypeEnum.nameFromId(accountDocument.getAccountType()))
+                        .accountNumber(accountDocument.getAccountNumber())
+                        .availableBalance(accountDocument.getAvailableBalance())
+                        .creationDate(accountDocument.getCreationDate())
+                        .userIdentification(accountDocument.getUserIdentification())
+                        .income(accountDocument.getIncome())
+                        .status(AccountStatusEnum.nameFromId(accountDocument.getStatus()))
+                        .build());
+    }
 }

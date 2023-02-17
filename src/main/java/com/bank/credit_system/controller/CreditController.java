@@ -1,6 +1,7 @@
 package com.bank.credit_system.controller;
 
 import com.bank.credit_system.dto.CreditDTO;
+import com.bank.credit_system.usecase.command.CreditCommandUseCase;
 import com.bank.credit_system.usecase.handler.CreditHandlerUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping(path = "/api/credits")
 public class CreditController {
     private final CreditHandlerUseCase creditHandlerUseCase;
+    private final CreditCommandUseCase creditCommandUseCase;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Flux<CreditDTO> findAll(){
@@ -26,7 +28,7 @@ public class CreditController {
 
     @PostMapping(path = "/credit")
     public Mono<CreditDTO> saveCredit(@RequestBody CreditDTO creditDTO){
-        return null;
+        return creditCommandUseCase.saveCredit(creditDTO);
     }
 
     @DeleteMapping(path = "/credit")

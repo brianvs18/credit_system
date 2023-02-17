@@ -22,7 +22,7 @@ public class UserCommandUseCase {
                 .filter(userData -> Objects.nonNull(userDTO.getId()))
                 .flatMap(userData -> userRepository.findById(userDTO.getId())
                         .filter(userDocument -> userDocument.getIdentification().equals(userDTO.getIdentification()))
-                        .map(userDocument -> UserDocument.builder()
+                        .map(userDocument -> userDocument.toBuilder()
                                 .id(userDocument.getId())
                                 .name(userData.getName())
                                 .lastname(userData.getLastname())

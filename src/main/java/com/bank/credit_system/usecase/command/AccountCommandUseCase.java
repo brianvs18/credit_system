@@ -33,12 +33,12 @@ public class AccountCommandUseCase {
                         .filter(userDTO -> Objects.nonNull(accountDTO.getId()))
                         .flatMap(userDTO -> accountRepository.findById(accountDTO.getId())
                                 .filter(accountDocument -> Objects.equals(accountDocument.getAccountNumber(), accountDTO.getAccountNumber()))
-                                .map(accountDB -> AccountDocument.builder()
+                                .map(accountDB -> accountDB.toBuilder()
                                         .id(accountDB.getId())
                                         .accountType(AccountTypeEnum.idFromName(accountDTO.getAccountType()))
                                         .accountNumber(accountDB.getAccountNumber())
                                         .income(accountDTO.getIncome())
-                                        .userIdentification(accountDTO.getUserIdentification())
+                                        .userIdentification(accountDB.getUserIdentification())
                                         .availableBalance(accountDB.getAvailableBalance())
                                         .creationDate(accountDB.getCreationDate())
                                         .status(accountDB.getStatus())
@@ -46,7 +46,6 @@ public class AccountCommandUseCase {
                                 .switchIfEmpty(Mono.defer(() -> Mono.error(new AccountErrorException(AccountErrorEnum.EDITING_ACCOUNT_NUMBER_NOT_ALLOWED)))))
                         .switchIfEmpty(Mono.defer(() -> Mono.just(accountDTO)
                                 .map(account -> AccountDocument.builder()
-                                        .id(account.getId())
                                         .accountType(AccountTypeEnum.idFromName(account.getAccountType()))
                                         .accountNumber(RandomUtils.nextLong(MIN_VALUE, MAX_VALUE))
                                         .income(account.getIncome())
@@ -60,6 +59,10 @@ public class AccountCommandUseCase {
     }
 
     public Mono<Void> deleteAccount(String accountId) {
-        return accountRepository.deleteById(accountId);
+        return accountRepository.findById(accountId)
+                .map(accountDocument -> accountDocument.toBuilder()
+                        .status(AccountStatusEnum.DISABLE.getId())
+                        .build())
+                .then();
     }
 }

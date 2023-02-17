@@ -12,6 +12,7 @@ import lombok.*;
 public class CreditDTO {
     private String id;
     private Double creditValue;
-    private String accountId;
+    private Integer userIdentification;
+    private Double expenses;
     private Long creationDate;
 }
