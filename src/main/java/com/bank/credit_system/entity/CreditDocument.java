@@ -14,7 +14,8 @@ public class CreditDocument {
     @Id
     private String id;
     private Double creditValue;
+    private Integer numberInstallments;
     private Integer userIdentification;
-    private Double expenses;
     private Long creationDate;
+    private String status;
 }

@@ -10,25 +10,29 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class CreditHandlerUseCase {
-     private final CreditRepository creditRepository;
+    private final CreditRepository creditRepository;
 
-     public Flux<CreditDTO> findAll(){
-         return creditRepository.findAll()
-                 .map(creditDocument -> CreditDTO.builder()
-                         .id(creditDocument.getId())
-                         .creditValue(creditDocument.getCreditValue())
-                         .accountId(creditDocument.getAccountId())
-                         .creationDate(creditDocument.getCreationDate())
-                         .build());
-     }
+    public Flux<CreditDTO> findAll() {
+        return creditRepository.findAll()
+                .map(creditDocument -> CreditDTO.builder()
+                        .id(creditDocument.getId())
+                        .creditValue(creditDocument.getCreditValue())
+                        .numberInstallments(creditDocument.getNumberInstallments())
+                        .creationDate(creditDocument.getCreationDate())
+                        .userIdentification(creditDocument.getUserIdentification())
+                        .status(creditDocument.getStatus())
+                        .build());
+    }
 
-     public Mono<CreditDTO> findById(String creditId){
-         return creditRepository.findById(creditId)
-                 .map(creditDocument -> CreditDTO.builder()
-                         .id(creditDocument.getId())
-                         .creditValue(creditDocument.getCreditValue())
-                         .accountId(creditDocument.getAccountId())
-                         .creationDate(creditDocument.getCreationDate())
-                         .build());
-     }
+    public Mono<CreditDTO> findById(String creditId) {
+        return creditRepository.findById(creditId)
+                .map(creditDocument -> CreditDTO.builder()
+                        .id(creditDocument.getId())
+                        .creditValue(creditDocument.getCreditValue())
+                        .numberInstallments(creditDocument.getNumberInstallments())
+                        .creationDate(creditDocument.getCreationDate())
+                        .userIdentification(creditDocument.getUserIdentification())
+                        .status(creditDocument.getStatus())
+                        .build());
+    }
 }
