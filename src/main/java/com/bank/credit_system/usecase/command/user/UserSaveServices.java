@@ -1,4 +1,4 @@
-package com.bank.credit_system.usecase.command;
+package com.bank.credit_system.usecase.command.user;
 
 import com.bank.credit_system.dto.UserDTO;
 import com.bank.credit_system.entity.UserDocument;
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class UserCommandUseCase {
+public class UserSaveServices {
     private final UserRepository userRepository;
 
     public Mono<UserDTO> saveUser(UserDTO userDTO) {
@@ -49,9 +49,5 @@ public class UserCommandUseCase {
                                 .switchIfEmpty(Mono.defer(() -> Mono.error(new UserException(UserErrorEnum.IDENTIFICATION_ALREADY_EXISTS)))))
                         .then())
                 .thenReturn(userDTO);
-    }
-
-    public Mono<Void> deleteUser(String userId) {
-        return userRepository.deleteById(userId);
     }
 }

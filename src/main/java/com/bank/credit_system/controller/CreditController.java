@@ -1,8 +1,8 @@
 package com.bank.credit_system.controller;
 
 import com.bank.credit_system.dto.CreditDTO;
-import com.bank.credit_system.usecase.command.CreditCommandUseCase;
-import com.bank.credit_system.usecase.handler.CreditHandlerUseCase;
+import com.bank.credit_system.usecase.command.credit.CreditSaveServices;
+import com.bank.credit_system.usecase.handler.CreditServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,26 +13,26 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/credits")
 public class CreditController {
-    private final CreditHandlerUseCase creditHandlerUseCase;
-    private final CreditCommandUseCase creditCommandUseCase;
+    private final CreditServices creditServices;
+    private final CreditSaveServices creditSaveServices;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public Flux<CreditDTO> findAll(){
-        return creditHandlerUseCase.findAll();
+    public Flux<CreditDTO> findAll() {
+        return creditServices.findAll();
     }
 
     @GetMapping(path = "/credit", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public Mono<CreditDTO> findById(@RequestParam(value = "creditId") final String creditId){
-        return creditHandlerUseCase.findById(creditId);
+    public Mono<CreditDTO> findById(@RequestParam(value = "creditId") final String creditId) {
+        return creditServices.findById(creditId);
     }
 
     @PostMapping(path = "/credit")
-    public Mono<CreditDTO> saveCredit(@RequestBody CreditDTO creditDTO){
-        return creditCommandUseCase.saveCredit(creditDTO);
+    public Mono<CreditDTO> saveCredit(@RequestBody CreditDTO creditDTO) {
+        return creditSaveServices.saveCredit(creditDTO);
     }
 
     @DeleteMapping(path = "/credit")
-    public Mono<Void> deleteCredit(@RequestParam(value = "creditId") final String creditId){
+    public Mono<Void> deleteCredit(@RequestParam(value = "creditId") final String creditId) {
         return null;
     }
 }

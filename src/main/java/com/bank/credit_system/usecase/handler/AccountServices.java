@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class AccountHandlerUseCase {
+public class AccountServices {
     private final AccountRepository accountRepository;
 
     public Flux<AccountDTO> findAll() {

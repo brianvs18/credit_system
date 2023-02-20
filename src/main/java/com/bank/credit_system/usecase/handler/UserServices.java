@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class UserHandlerUseCase {
+public class UserServices {
     private final UserRepository userRepository;
 
     public Flux<UserDTO> findAll(){

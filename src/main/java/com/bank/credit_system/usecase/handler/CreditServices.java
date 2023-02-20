@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class CreditHandlerUseCase {
+public class CreditServices {
     private final CreditRepository creditRepository;
 
     public Flux<CreditDTO> findAll() {
@@ -26,6 +26,18 @@ public class CreditHandlerUseCase {
 
     public Mono<CreditDTO> findById(String creditId) {
         return creditRepository.findById(creditId)
+                .map(creditDocument -> CreditDTO.builder()
+                        .id(creditDocument.getId())
+                        .creditValue(creditDocument.getCreditValue())
+                        .numberInstallments(creditDocument.getNumberInstallments())
+                        .creationDate(creditDocument.getCreationDate())
+                        .userIdentification(creditDocument.getUserIdentification())
+                        .status(creditDocument.getStatus())
+                        .build());
+    }
+
+    public Flux<CreditDTO> findAllByUserIdentification(Integer userIdentification) {
+        return creditRepository.findAllByUserIdentification(userIdentification)
                 .map(creditDocument -> CreditDTO.builder()
                         .id(creditDocument.getId())
                         .creditValue(creditDocument.getCreditValue())

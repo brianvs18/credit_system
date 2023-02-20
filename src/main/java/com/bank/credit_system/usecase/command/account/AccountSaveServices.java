@@ -1,4 +1,4 @@
-package com.bank.credit_system.usecase.command;
+package com.bank.credit_system.usecase.command.account;
 
 import com.bank.credit_system.dto.AccountDTO;
 import com.bank.credit_system.entity.AccountDocument;
@@ -9,7 +9,7 @@ import com.bank.credit_system.enums.UserErrorEnum;
 import com.bank.credit_system.exceptions.AccountErrorException;
 import com.bank.credit_system.exceptions.UserException;
 import com.bank.credit_system.repository.AccountRepository;
-import com.bank.credit_system.usecase.handler.UserHandlerUseCase;
+import com.bank.credit_system.usecase.handler.UserServices;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Service;
@@ -20,15 +20,15 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class AccountCommandUseCase {
+public class AccountSaveServices {
     private final AccountRepository accountRepository;
-    private final UserHandlerUseCase userHandlerUseCase;
+    private final UserServices userServices;
     private static final Long MIN_VALUE = 11111111111L;
     private static final Long MAX_VALUE = 99999999999L;
 
     public Mono<AccountDTO> saveAccount(AccountDTO accountDTO) {
         return Mono.just(accountDTO)
-                .flatMap(accountData -> userHandlerUseCase.findByIdentification(accountDTO.getUserIdentification())
+                .flatMap(accountData -> userServices.findByIdentification(accountDTO.getUserIdentification())
                         .switchIfEmpty(Mono.defer(() -> Mono.error(new UserException(UserErrorEnum.USER_IS_NOT_EXISTS))))
                         .filter(userDTO -> Objects.nonNull(accountDTO.getId()))
                         .flatMap(userDTO -> accountRepository.findById(accountDTO.getId())
@@ -56,13 +56,5 @@ public class AccountCommandUseCase {
                         )))
                 .flatMap(accountRepository::save)
                 .thenReturn(accountDTO);
-    }
-
-    public Mono<Void> deleteAccount(String accountId) {
-        return accountRepository.findById(accountId)
-                .map(accountDocument -> accountDocument.toBuilder()
-                        .status(AccountStatusEnum.DISABLE.getId())
-                        .build())
-                .then();
     }
 }
