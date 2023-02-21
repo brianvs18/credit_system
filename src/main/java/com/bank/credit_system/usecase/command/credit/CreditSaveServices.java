@@ -49,9 +49,9 @@ public class CreditSaveServices {
                                                 .userIdentification(credit.getUserIdentification())
                                                 .creationDate(Clock.systemDefaultZone().millis())
                                                 .status(CreditStatusEnum.ACTIVE.getId())
-                                                .build())))))
-                .flatMap(creditRepository::save)
-                .thenReturn(creditDTO);
+                                                .build())))
+                                .flatMap(creditRepository::save)
+                                .thenReturn(creditDataDTO)));
     }
 
     private Mono<CreditDTO> validateUserIncome(CreditDTO creditDTO, AccountDTO accountDTO) {
@@ -65,23 +65,31 @@ public class CreditSaveServices {
     }
 
     private Mono<CreditDTO> validateUserDebtCapacity(CreditDTO creditDTO, AccountDTO accountDTO) {
-        return Mono.just(creditDTO)
-                .map(credit -> credit.toBuilder()
-                        .monthlyFee(creditDTO.getCreditValue() / creditDTO.getNumberInstallments())
-                        .build())
-                .flatMap(creditData -> creditServices.findAllByUserIdentification(creditData.getUserIdentification())
-                        .filter(creditDTO1 -> !creditDTO1.getStatus().equals(CreditStatusEnum.CANCEL.getId()))
-                        .collectList()
-                        .filter(creditDTOS -> !creditDTOS.isEmpty())
-                        .map(creditDTOS -> creditData.toBuilder()
-                                .totalBorrowingCapacity(calculateTotalCapacity(creditData, creditDTOS))
-                                .build())
+        return buildMonthlyFee(creditDTO)
+                .flatMap(creditData -> findCreditsByUserAndCalculateTotalBorrowingCapacity(creditData)
                         .switchIfEmpty(Mono.defer(() -> Mono.just(creditData)
                                 .map(credit -> credit.toBuilder()
                                         .totalBorrowingCapacity(credit.getMonthlyFee() + creditDTO.getExpenses())
                                         .build()))))
                 .filter(userCredit -> userCredit.getTotalBorrowingCapacity() < (accountDTO.getIncome() * PERCENTAGE_DEBT))
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new CreditException(CreditErrorEnum.DOES_NOT_MEET_DEBT_CAPACITY))));
+    }
+
+    private Mono<CreditDTO> findCreditsByUserAndCalculateTotalBorrowingCapacity(CreditDTO creditData) {
+        return creditServices.findAllByUserIdentification(creditData.getUserIdentification())
+                .filter(creditDB -> !CreditStatusEnum.CANCEL.getId().equals(creditDB.getStatus()))
+                .collectList()
+                .filter(creditDTOS -> !creditDTOS.isEmpty())
+                .map(creditDTOS -> creditData.toBuilder()
+                        .totalBorrowingCapacity(calculateTotalCapacity(creditData, creditDTOS))
+                        .build());
+    }
+
+    private Mono<CreditDTO> buildMonthlyFee(CreditDTO creditDTO) {
+        return Mono.just(creditDTO)
+                .map(credit -> credit.toBuilder()
+                        .monthlyFee(creditDTO.getCreditValue() / creditDTO.getNumberInstallments())
+                        .build());
     }
 
     private Double calculateTotalCapacity(CreditDTO creditData, List<CreditDTO> creditDTOS) {
