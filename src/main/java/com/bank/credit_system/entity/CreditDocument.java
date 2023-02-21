@@ -15,6 +15,7 @@ public class CreditDocument {
     private String id;
     private Double creditValue;
     private Integer numberInstallments;
+    private Double monthlyFee;
     private Integer userIdentification;
     private Long creationDate;
     private String status;

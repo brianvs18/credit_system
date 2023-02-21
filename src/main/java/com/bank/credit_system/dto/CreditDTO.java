@@ -15,6 +15,8 @@ public class CreditDTO {
     private Integer numberInstallments;
     private Integer userIdentification;
     private Double expenses;
+    private Double monthlyFee;
+    private Double totalBorrowingCapacity;
     private Long creationDate;
     private String status;
 }
