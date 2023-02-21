@@ -1,6 +1,7 @@
 package com.bank.credit_system.controller;
 
 import com.bank.credit_system.dto.CreditDTO;
+import com.bank.credit_system.usecase.command.credit.CreditDeleteServices;
 import com.bank.credit_system.usecase.command.credit.CreditSaveServices;
 import com.bank.credit_system.usecase.handler.CreditServices;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 public class CreditController {
     private final CreditServices creditServices;
     private final CreditSaveServices creditSaveServices;
+    private final CreditDeleteServices creditDeleteServices;
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Flux<CreditDTO> findAll() {
@@ -33,6 +35,6 @@ public class CreditController {
 
     @DeleteMapping(path = "/credit")
     public Mono<Void> deleteCredit(@RequestParam(value = "creditId") final String creditId) {
-        return null;
+        return creditDeleteServices.deleteCredit(creditId);
     }
 }

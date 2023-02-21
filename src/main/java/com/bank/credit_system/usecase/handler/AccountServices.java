@@ -1,8 +1,10 @@
 package com.bank.credit_system.usecase.handler;
 
 import com.bank.credit_system.dto.AccountDTO;
+import com.bank.credit_system.enums.AccountErrorEnum;
 import com.bank.credit_system.enums.AccountStatusEnum;
 import com.bank.credit_system.enums.AccountTypeEnum;
+import com.bank.credit_system.exceptions.AccountErrorException;
 import com.bank.credit_system.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,6 +55,7 @@ public class AccountServices {
                         .userIdentification(accountDocument.getUserIdentification())
                         .income(accountDocument.getIncome())
                         .status(AccountStatusEnum.nameFromId(accountDocument.getStatus()))
-                        .build());
+                        .build())
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new AccountErrorException(AccountErrorEnum.USER_HAS_NO_REGISTERED_ACCOUNT))));
     }
 }

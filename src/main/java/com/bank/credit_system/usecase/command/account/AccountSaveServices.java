@@ -5,9 +5,7 @@ import com.bank.credit_system.entity.AccountDocument;
 import com.bank.credit_system.enums.AccountErrorEnum;
 import com.bank.credit_system.enums.AccountStatusEnum;
 import com.bank.credit_system.enums.AccountTypeEnum;
-import com.bank.credit_system.enums.UserErrorEnum;
 import com.bank.credit_system.exceptions.AccountErrorException;
-import com.bank.credit_system.exceptions.UserException;
 import com.bank.credit_system.repository.AccountRepository;
 import com.bank.credit_system.usecase.handler.UserServices;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +27,6 @@ public class AccountSaveServices {
     public Mono<AccountDTO> saveAccount(AccountDTO accountDTO) {
         return Mono.just(accountDTO)
                 .flatMap(accountData -> userServices.findByIdentification(accountDTO.getUserIdentification())
-                        .switchIfEmpty(Mono.defer(() -> Mono.error(new UserException(UserErrorEnum.USER_IS_NOT_EXISTS))))
                         .filter(userDTO -> Objects.nonNull(accountDTO.getId()))
                         .flatMap(userDTO -> accountRepository.findById(accountDTO.getId())
                                 .filter(accountDocument -> Objects.equals(accountDocument.getAccountNumber(), accountDTO.getAccountNumber()))

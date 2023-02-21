@@ -3,10 +3,8 @@ package com.bank.credit_system.usecase.command.credit;
 import com.bank.credit_system.dto.AccountDTO;
 import com.bank.credit_system.dto.CreditDTO;
 import com.bank.credit_system.entity.CreditDocument;
-import com.bank.credit_system.enums.AccountErrorEnum;
 import com.bank.credit_system.enums.CreditErrorEnum;
 import com.bank.credit_system.enums.CreditStatusEnum;
-import com.bank.credit_system.exceptions.AccountErrorException;
 import com.bank.credit_system.exceptions.CreditException;
 import com.bank.credit_system.repository.CreditRepository;
 import com.bank.credit_system.usecase.handler.AccountServices;
@@ -25,10 +23,11 @@ public class CreditSaveServices {
     private final CreditRepository creditRepository;
     private final AccountServices accountServices;
     private final CreditServices creditServices;
+    private static final Double PERCENTAGE_DEBT = 0.40;
 
     public Mono<CreditDTO> saveCredit(CreditDTO creditDTO) {
         return Mono.just(creditDTO)
-                .flatMap(creditData -> validateUserHasAccount(creditDTO)
+                .flatMap(creditData -> accountServices.findByUserIdentification(creditDTO.getUserIdentification())
                         .flatMap(accountDTO -> validateUserIncome(creditData, accountDTO))
                         .flatMap(creditDataDTO -> Mono.just(creditDataDTO)
                                 .filter(credit -> Objects.nonNull(credit.getId()))
@@ -55,11 +54,6 @@ public class CreditSaveServices {
                 .thenReturn(creditDTO);
     }
 
-    private Mono<AccountDTO> validateUserHasAccount(CreditDTO creditDTO) {
-        return accountServices.findByUserIdentification(creditDTO.getUserIdentification())
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new AccountErrorException(AccountErrorEnum.USER_HAS_NO_REGISTERED_ACCOUNT))));
-    }
-
     private Mono<CreditDTO> validateUserIncome(CreditDTO creditDTO, AccountDTO accountDTO) {
         return Mono.just(creditDTO)
                 .filter(credit -> Objects.nonNull(creditDTO.getExpenses()))
@@ -67,7 +61,7 @@ public class CreditSaveServices {
                         .filter(creditDataDTO -> accountDTO.getIncome() > creditDTO.getExpenses())
                         .flatMap(creditDataDTO -> validateUserDebtCapacity(creditDataDTO, accountDTO))
                         .switchIfEmpty(Mono.defer(() -> Mono.error(new CreditException(CreditErrorEnum.EXPENDITURES_EXCEED_INCOME)))))
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new CreditException(CreditErrorEnum.EXPENSES_ARE_REQUIRED))));
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new CreditException(CreditErrorEnum.EXPENSES_IS_REQUIRED))));
     }
 
     private Mono<CreditDTO> validateUserDebtCapacity(CreditDTO creditDTO, AccountDTO accountDTO) {
@@ -76,6 +70,7 @@ public class CreditSaveServices {
                         .monthlyFee(creditDTO.getCreditValue() / creditDTO.getNumberInstallments())
                         .build())
                 .flatMap(creditData -> creditServices.findAllByUserIdentification(creditData.getUserIdentification())
+                        .filter(creditDTO1 -> !creditDTO1.getStatus().equals(CreditStatusEnum.CANCEL.getId()))
                         .collectList()
                         .filter(creditDTOS -> !creditDTOS.isEmpty())
                         .map(creditDTOS -> creditData.toBuilder()
@@ -85,7 +80,7 @@ public class CreditSaveServices {
                                 .map(credit -> credit.toBuilder()
                                         .totalBorrowingCapacity(credit.getMonthlyFee() + creditDTO.getExpenses())
                                         .build()))))
-                .filter(userCredit -> userCredit.getTotalBorrowingCapacity() < (accountDTO.getIncome() * 0.4))
+                .filter(userCredit -> userCredit.getTotalBorrowingCapacity() < (accountDTO.getIncome() * PERCENTAGE_DEBT))
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new CreditException(CreditErrorEnum.DOES_NOT_MEET_DEBT_CAPACITY))));
     }
 

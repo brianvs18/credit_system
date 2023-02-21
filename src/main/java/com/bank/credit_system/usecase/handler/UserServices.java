@@ -1,6 +1,8 @@
 package com.bank.credit_system.usecase.handler;
 
 import com.bank.credit_system.dto.UserDTO;
+import com.bank.credit_system.enums.UserErrorEnum;
+import com.bank.credit_system.exceptions.UserException;
 import com.bank.credit_system.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ import reactor.core.publisher.Mono;
 public class UserServices {
     private final UserRepository userRepository;
 
-    public Flux<UserDTO> findAll(){
+    public Flux<UserDTO> findAll() {
         return userRepository.findAll()
                 .map(userDocument -> UserDTO.builder()
                         .id(userDocument.getId())
@@ -23,7 +25,7 @@ public class UserServices {
                         .build());
     }
 
-    public Mono<UserDTO> findById(String userId){
+    public Mono<UserDTO> findById(String userId) {
         return userRepository.findById(userId)
                 .map(userDocument -> UserDTO.builder()
                         .id(userDocument.getId())
@@ -34,7 +36,7 @@ public class UserServices {
                         .build());
     }
 
-    public Mono<UserDTO> findByIdentification(Integer identification){
+    public Mono<UserDTO> findByIdentification(Integer identification) {
         return userRepository.findByIdentification(identification)
                 .map(userDocument -> UserDTO.builder()
                         .id(userDocument.getId())
@@ -42,6 +44,7 @@ public class UserServices {
                         .lastname(userDocument.getLastname())
                         .identification(userDocument.getIdentification())
                         .age(userDocument.getAge())
-                        .build());
+                        .build())
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new UserException(UserErrorEnum.USER_IS_NOT_EXISTS))));
     }
 }
