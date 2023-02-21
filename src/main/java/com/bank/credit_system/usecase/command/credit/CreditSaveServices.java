@@ -10,6 +10,7 @@ import com.bank.credit_system.repository.CreditRepository;
 import com.bank.credit_system.usecase.handler.AccountServices;
 import com.bank.credit_system.usecase.handler.CreditServices;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -24,6 +25,8 @@ public class CreditSaveServices {
     private final AccountServices accountServices;
     private final CreditServices creditServices;
     private static final Double PERCENTAGE_DEBT = 0.40;
+    private static final Integer MIN_VALUE = 111111;
+    private static final Integer MAX_VALUE = 999999;
 
     public Mono<CreditDTO> saveCredit(CreditDTO creditDTO) {
         return Mono.just(creditDTO)
@@ -34,6 +37,7 @@ public class CreditSaveServices {
                                 .flatMap(credit -> creditRepository.findById(creditDTO.getId())
                                         .map(creditDocument -> creditDocument.toBuilder()
                                                 .id(creditDocument.getId())
+                                                .creditNumber(creditDocument.getCreditNumber())
                                                 .creationDate(creditDocument.getCreationDate())
                                                 .numberInstallments(creditDocument.getNumberInstallments())
                                                 .creditValue(creditDTO.getCreditValue())
@@ -44,6 +48,7 @@ public class CreditSaveServices {
                                 .switchIfEmpty(Mono.defer(() -> Mono.just(creditDataDTO)
                                         .map(credit -> CreditDocument.builder()
                                                 .creditValue(credit.getCreditValue())
+                                                .creditNumber(RandomUtils.nextInt(MIN_VALUE, MAX_VALUE))
                                                 .numberInstallments(credit.getNumberInstallments())
                                                 .monthlyFee(credit.getMonthlyFee())
                                                 .userIdentification(credit.getUserIdentification())

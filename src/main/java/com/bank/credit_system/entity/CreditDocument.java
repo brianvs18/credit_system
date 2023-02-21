@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class CreditDocument {
     @Id
     private String id;
+    private Integer creditNumber;
     private Double creditValue;
     private Integer numberInstallments;
     private Double monthlyFee;
