@@ -3,6 +3,7 @@ package com.bank.credit_system.usecase.handler;
 import com.bank.credit_system.dto.CreditDTO;
 import com.bank.credit_system.enums.CreditErrorEnum;
 import com.bank.credit_system.exceptions.CreditException;
+import com.bank.credit_system.functions.DateFunction;
 import com.bank.credit_system.repository.CreditRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class CreditServices {
                         .creditValue(creditDocument.getCreditValue())
                         .numberInstallments(creditDocument.getNumberInstallments())
                         .monthlyFee(creditDocument.getMonthlyFee())
-                        .creationDate(creditDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(creditDocument.getCreationDate()))
                         .userIdentification(creditDocument.getUserIdentification())
                         .status(creditDocument.getStatus())
                         .build());
@@ -36,7 +37,7 @@ public class CreditServices {
                         .creditValue(creditDocument.getCreditValue())
                         .numberInstallments(creditDocument.getNumberInstallments())
                         .monthlyFee(creditDocument.getMonthlyFee())
-                        .creationDate(creditDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(creditDocument.getCreationDate()))
                         .userIdentification(creditDocument.getUserIdentification())
                         .status(creditDocument.getStatus())
                         .build());
@@ -50,7 +51,7 @@ public class CreditServices {
                         .creditValue(creditDocument.getCreditValue())
                         .numberInstallments(creditDocument.getNumberInstallments())
                         .monthlyFee(creditDocument.getMonthlyFee())
-                        .creationDate(creditDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(creditDocument.getCreationDate()))
                         .userIdentification(creditDocument.getUserIdentification())
                         .status(creditDocument.getStatus())
                         .build());
@@ -64,7 +65,7 @@ public class CreditServices {
                         .creditValue(creditDocument.getCreditValue())
                         .numberInstallments(creditDocument.getNumberInstallments())
                         .monthlyFee(creditDocument.getMonthlyFee())
-                        .creationDate(creditDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(creditDocument.getCreationDate()))
                         .userIdentification(creditDocument.getUserIdentification())
                         .status(creditDocument.getStatus())
                         .build())

@@ -18,6 +18,6 @@ public class CreditDTO {
     private Double expenses;
     private Double monthlyFee;
     private Double totalBorrowingCapacity;
-    private Long creationDate;
+    private String creationDate;
     private String status;
 }

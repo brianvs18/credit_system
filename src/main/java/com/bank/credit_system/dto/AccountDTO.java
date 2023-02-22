@@ -15,7 +15,7 @@ public class AccountDTO {
     private Long accountNumber;
     private Double availableBalance;
     private Double income;
-    private Long creationDate;
+    private String creationDate;
     private Integer userIdentification;
     private String status;
 }

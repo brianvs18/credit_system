@@ -105,7 +105,7 @@ public class CreditSaveServices {
 
     public Mono<CreditDTO> editCreditBeforePayment(CreditDTO creditDTO, Double payment) {
         return Mono.just(creditDTO)
-                .flatMap(creditData -> creditServices.findById(creditDTO.getId())
+                .flatMap(creditData -> creditRepository.findById(creditDTO.getId())
                         .map(creditDB -> CreditDocument.builder()
                                 .id(creditDB.getId())
                                 .creditValue(creditDB.getCreditValue() - payment)

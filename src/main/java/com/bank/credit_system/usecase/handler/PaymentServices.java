@@ -1,6 +1,7 @@
 package com.bank.credit_system.usecase.handler;
 
 import com.bank.credit_system.dto.PaymentDTO;
+import com.bank.credit_system.functions.DateFunction;
 import com.bank.credit_system.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class PaymentServices {
                         .creditNumber(paymentDocument.getCreditNumber())
                         .userIdentification(paymentDocument.getUserIdentification())
                         .payment(paymentDocument.getPayment())
-                        .creationDate(paymentDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(paymentDocument.getCreationDate()))
                         .build());
     }
 
@@ -30,7 +31,7 @@ public class PaymentServices {
                         .creditNumber(paymentDocument.getCreditNumber())
                         .userIdentification(paymentDocument.getUserIdentification())
                         .payment(paymentDocument.getPayment())
-                        .creationDate(paymentDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(paymentDocument.getCreationDate()))
                         .build());
     }
 }

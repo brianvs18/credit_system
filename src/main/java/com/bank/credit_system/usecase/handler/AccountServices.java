@@ -5,6 +5,7 @@ import com.bank.credit_system.enums.AccountErrorEnum;
 import com.bank.credit_system.enums.AccountStatusEnum;
 import com.bank.credit_system.enums.AccountTypeEnum;
 import com.bank.credit_system.exceptions.AccountErrorException;
+import com.bank.credit_system.functions.DateFunction;
 import com.bank.credit_system.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class AccountServices {
                         .accountType(AccountTypeEnum.nameFromId(accountDocument.getAccountType()))
                         .accountNumber(accountDocument.getAccountNumber())
                         .availableBalance(accountDocument.getAvailableBalance())
-                        .creationDate(accountDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(accountDocument.getCreationDate()))
                         .userIdentification(accountDocument.getUserIdentification())
                         .income(accountDocument.getIncome())
                         .status(AccountStatusEnum.nameFromId(accountDocument.getStatus()))
@@ -37,7 +38,7 @@ public class AccountServices {
                         .accountType(AccountTypeEnum.nameFromId(accountDocument.getAccountType()))
                         .accountNumber(accountDocument.getAccountNumber())
                         .availableBalance(accountDocument.getAvailableBalance())
-                        .creationDate(accountDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(accountDocument.getCreationDate()))
                         .userIdentification(accountDocument.getUserIdentification())
                         .income(accountDocument.getIncome())
                         .status(AccountStatusEnum.nameFromId(accountDocument.getStatus()))
@@ -51,7 +52,7 @@ public class AccountServices {
                         .accountType(AccountTypeEnum.nameFromId(accountDocument.getAccountType()))
                         .accountNumber(accountDocument.getAccountNumber())
                         .availableBalance(accountDocument.getAvailableBalance())
-                        .creationDate(accountDocument.getCreationDate())
+                        .creationDate(DateFunction.getDateFromMillis(accountDocument.getCreationDate()))
                         .userIdentification(accountDocument.getUserIdentification())
                         .income(accountDocument.getIncome())
                         .status(AccountStatusEnum.nameFromId(accountDocument.getStatus()))

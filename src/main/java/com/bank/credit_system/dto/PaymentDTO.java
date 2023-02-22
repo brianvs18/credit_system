@@ -14,5 +14,5 @@ public class PaymentDTO {
     private Integer creditNumber;
     private Integer userIdentification;
     private Double payment;
-    private Long creationDate;
+    private String creationDate;
 }
