@@ -18,6 +18,6 @@ public class AccountDocument {
     private Double availableBalance;
     private Double income;
     private Long creationDate;
-    private Integer userIdentification;
+    private String userIdentification;
     private String status;
 }

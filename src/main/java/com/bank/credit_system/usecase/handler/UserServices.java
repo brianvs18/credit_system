@@ -36,7 +36,7 @@ public class UserServices {
                         .build());
     }
 
-    public Mono<UserDTO> findByIdentification(Integer identification) {
+    public Mono<UserDTO> findByIdentification(String identification) {
         return userRepository.findByIdentification(identification)
                 .map(userDocument -> UserDTO.builder()
                         .id(userDocument.getId())

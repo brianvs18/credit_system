@@ -6,6 +6,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface CreditRepository extends ReactiveMongoRepository<CreditDocument, String> {
-    Flux<CreditDocument> findAllByUserIdentification(Integer userIdentification);
+    Flux<CreditDocument> findAllByUserIdentification(String userIdentification);
     Mono<CreditDocument> findByCreditNumber(Integer creditNumber);
 }

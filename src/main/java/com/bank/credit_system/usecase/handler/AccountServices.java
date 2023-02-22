@@ -45,7 +45,7 @@ public class AccountServices {
                         .build());
     }
 
-    public Mono<AccountDTO> findByUserIdentification(Integer userIdentification) {
+    public Mono<AccountDTO> findByUserIdentification(String userIdentification) {
         return accountRepository.findByUserIdentification(userIdentification)
                 .map(accountDocument -> AccountDTO.builder()
                         .id(accountDocument.getId())

@@ -50,8 +50,8 @@ public class AccountSaveServices {
                                         .creationDate(Clock.systemDefaultZone().millis())
                                         .status(AccountStatusEnum.ACTIVE.getId())
                                         .build())
-                        )))
-                .flatMap(accountRepository::save)
-                .thenReturn(accountDTO);
+                        ))
+                        .flatMap(accountRepository::save)
+                        .thenReturn(accountDTO));
     }
 }

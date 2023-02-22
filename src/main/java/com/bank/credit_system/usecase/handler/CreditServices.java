@@ -44,7 +44,7 @@ public class CreditServices {
                         .build());
     }
 
-    public Flux<CreditDTO> findAllByUserIdentification(Integer userIdentification) {
+    public Flux<CreditDTO> findAllByUserIdentification(String userIdentification) {
         return creditRepository.findAllByUserIdentification(userIdentification)
                 .map(creditDocument -> CreditDTO.builder()
                         .id(creditDocument.getId())

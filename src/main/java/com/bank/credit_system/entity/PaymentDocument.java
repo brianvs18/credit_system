@@ -14,7 +14,7 @@ public class PaymentDocument {
     @Id
     private String id;
     private Integer creditNumber;
-    private Integer userIdentification;
+    private String userIdentification;
     private Double payment;
     private Long creationDate;
 }

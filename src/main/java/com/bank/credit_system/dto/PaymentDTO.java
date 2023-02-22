@@ -12,7 +12,7 @@ import lombok.*;
 public class PaymentDTO {
     private String id;
     private Integer creditNumber;
-    private Integer userIdentification;
+    private String userIdentification;
     private Double payment;
     private String creationDate;
 }
