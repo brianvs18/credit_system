@@ -1,4 +1,4 @@
-package com.bank.credit_system.controller.controleradvice;
+package com.bank.credit_system.controller.controlleradvice;
 
 import com.bank.credit_system.dto.ErrorDTO;
 import org.springframework.http.HttpStatus;

@@ -11,6 +11,7 @@ import com.bank.credit_system.usecase.handler.AccountServices;
 import com.bank.credit_system.usecase.handler.CreditServices;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -100,5 +101,29 @@ public class CreditSaveServices {
     private Double calculateTotalCapacity(CreditDTO creditData, List<CreditDTO> creditDTOS) {
         return creditDTOS.stream()
                 .mapToDouble(CreditDTO::getMonthlyFee).sum() + creditData.getExpenses() + creditData.getMonthlyFee();
+    }
+
+    public Mono<CreditDTO> editCreditBeforePayment(CreditDTO creditDTO, Double payment) {
+        return Mono.just(creditDTO)
+                .flatMap(creditData -> creditServices.findById(creditDTO.getId())
+                        .map(creditDB -> CreditDocument.builder()
+                                .id(creditDB.getId())
+                                .creditValue(creditDB.getCreditValue() - payment)
+                                .numberInstallments(creditDTO.getNumberInstallments() - NumberUtils.INTEGER_ONE)
+                                .monthlyFee(creditDB.getMonthlyFee())
+                                .creditNumber(creditDB.getCreditNumber())
+                                .userIdentification(creditDB.getUserIdentification())
+                                .status(creditDB.getStatus())
+                                .creationDate(creditDB.getCreationDate())
+                                .build())
+                        .flatMap(creditDocument -> Mono.just(creditDocument)
+                                .filter(creditDB -> Objects.equals(creditDB.getCreditValue(), NumberUtils.DOUBLE_ZERO))
+                                .map(credit -> credit.toBuilder()
+                                        .numberInstallments(NumberUtils.INTEGER_ZERO)
+                                        .status(CreditStatusEnum.CANCEL.getId())
+                                        .build())
+                                .defaultIfEmpty(creditDocument))
+                        .flatMap(creditRepository::save)
+                        .thenReturn(creditDTO));
     }
 }

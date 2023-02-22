@@ -56,7 +56,7 @@ public class CreditServices {
                         .build());
     }
 
-    public Mono<CreditDTO> findAllByCreditNumber(Integer creditNumber) {
+    public Mono<CreditDTO> findByCreditNumber(Integer creditNumber) {
         return creditRepository.findByCreditNumber(creditNumber)
                 .map(creditDocument -> CreditDTO.builder()
                         .id(creditDocument.getId())
