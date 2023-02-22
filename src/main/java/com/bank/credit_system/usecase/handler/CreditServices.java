@@ -2,6 +2,7 @@ package com.bank.credit_system.usecase.handler;
 
 import com.bank.credit_system.dto.CreditDTO;
 import com.bank.credit_system.enums.CreditErrorEnum;
+import com.bank.credit_system.enums.CreditStatusEnum;
 import com.bank.credit_system.exceptions.CreditException;
 import com.bank.credit_system.functions.DateFunction;
 import com.bank.credit_system.repository.CreditRepository;
@@ -25,7 +26,7 @@ public class CreditServices {
                         .monthlyFee(creditDocument.getMonthlyFee())
                         .creationDate(DateFunction.getDateFromMillis(creditDocument.getCreationDate()))
                         .userIdentification(creditDocument.getUserIdentification())
-                        .status(creditDocument.getStatus())
+                        .status(CreditStatusEnum.nameFromId(creditDocument.getStatus()))
                         .build());
     }
 
@@ -39,7 +40,7 @@ public class CreditServices {
                         .monthlyFee(creditDocument.getMonthlyFee())
                         .creationDate(DateFunction.getDateFromMillis(creditDocument.getCreationDate()))
                         .userIdentification(creditDocument.getUserIdentification())
-                        .status(creditDocument.getStatus())
+                        .status(CreditStatusEnum.nameFromId(creditDocument.getStatus()))
                         .build());
     }
 
