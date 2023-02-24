@@ -16,7 +16,7 @@ public class ControllerAdvice {
                 .map(exception1 -> ErrorDTO.builder()
                         .requestId(UUID.randomUUID().toString().replace("-", ""))
                         .message(exception.getMessage())
-                        .status(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR))
+                        .status(String.valueOf(HttpStatus.BAD_REQUEST))
                         .build());
     }
 }
